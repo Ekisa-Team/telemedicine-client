@@ -8,11 +8,6 @@
     <Route path="/">
       <Home />
     </Route>
-
-    <Route path="about">
-      <h3>About</h3>
-      <p>That's what it's all abouts!</p>
-    </Route>
   </main>
 </Router>
 

@@ -7,7 +7,7 @@
   let roomName = '';
 
   const handleSubmit = () => {
-    dispatch('submit', {
+    dispatch('login', {
       identity,
       roomName
     });
