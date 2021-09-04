@@ -3,8 +3,8 @@
 
   const dispatch = createEventDispatcher();
 
-  let identity = '';
-  let roomName = '';
+  let identity = 'Juan David';
+  let roomName = 'test-room';
 
   const handleSubmit = () => {
     dispatch('login', {

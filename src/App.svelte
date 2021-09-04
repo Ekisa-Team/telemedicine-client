@@ -4,11 +4,9 @@
 </script>
 
 <Router>
-  <main>
-    <Route path="/">
-      <Home />
-    </Route>
-  </main>
+  <Route path="/">
+    <Home />
+  </Route>
 </Router>
 
 <style global lang="postcss">
@@ -19,6 +17,11 @@
   html {
     @apply font-body;
     @apply font-light;
+  }
+
+  html,
+  body {
+    @apply h-full;
   }
 
   h1,
