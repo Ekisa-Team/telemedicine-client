@@ -1,13 +1,14 @@
-import svelte from "rollup-plugin-svelte";
-import resolve from "rollup-plugin-node-resolve";
+import json from "@rollup/plugin-json";
+import replace from "@rollup/plugin-replace";
+import dotenv from "dotenv";
 import commonjs from "rollup-plugin-commonjs";
 import livereload from "rollup-plugin-livereload";
-import { terser } from "rollup-plugin-terser";
-import replace from "@rollup/plugin-replace";
-import json from "@rollup/plugin-json";
 import builtins from "rollup-plugin-node-builtins";
+import resolve from "rollup-plugin-node-resolve";
+import svelte from "rollup-plugin-svelte";
+import { terser } from "rollup-plugin-terser";
+import sveltePreprocess from "svelte-preprocess";
 
-import dotenv from "dotenv";
 dotenv.config();
 
 const production = !process.env.ROLLUP_WATCH;
@@ -18,22 +19,28 @@ export default {
     sourcemap: true,
     format: "iife",
     name: "app",
-    file: "public/build/bundle.js"
+    file: "public/build/bundle.js",
   },
   plugins: [
     builtins(),
     json(),
     replace({
-      TOKEN_URL: process.env.TOKEN_URL
+      TOKEN_URL: process.env.TOKEN_URL,
     }),
     svelte({
       // enable run-time checks when not in production
       dev: !production,
       // we'll extract any component CSS out into
       // a separate file — better for performance
-      css: css => {
+      css: (css) => {
         css.write("public/build/bundle.css");
-      }
+      },
+      preprocess: sveltePreprocess({
+        sourceMap: !production,
+        postcss: {
+          plugins: [require("tailwindcss"), require("autoprefixer")],
+        },
+      }),
     }),
 
     // If you have external dependencies installed from
@@ -43,8 +50,8 @@ export default {
     // https://github.com/rollup/rollup-plugin-commonjs
     resolve({
       browser: true,
-      dedupe: importee =>
-        importee === "svelte" || importee.startsWith("svelte/")
+      dedupe: (importee) =>
+        importee === "svelte" || importee.startsWith("svelte/"),
     }),
     commonjs(),
 
@@ -58,11 +65,11 @@ export default {
 
     // If we're building for production (npm run build
     // instead of npm run dev), minify
-    production && terser()
+    production && terser(),
   ],
   watch: {
-    clearScreen: false
-  }
+    clearScreen: false,
+  },
 };
 
 function serve() {
@@ -75,9 +82,9 @@ function serve() {
 
         require("child_process").spawn("npm", ["run", "start", "--", "--dev"], {
           stdio: ["ignore", "inherit", "inherit"],
-          shell: true
+          shell: true,
         });
       }
-    }
+    },
   };
 }
