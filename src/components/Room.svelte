@@ -42,10 +42,13 @@
 {#if room !== null}
   <button on:click={leaveRoom}>Leave room</button>
 
-  <Participant participant={room.localParticipant} />
+  <div class="container pt-12">
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-2 justify-items-center">
+      <Participant participant={room.localParticipant} />
 
-  <h2>Remote Participants</h2>
-  {#each participants as participant}
-    <Participant {participant} />
-  {/each}
+      {#each participants as participant}
+        <Participant {participant} />
+      {/each}
+    </div>
+  </div>
 {/if}

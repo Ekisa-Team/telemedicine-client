@@ -1,6 +1,5 @@
 <script>
-  import { onMount } from "svelte";
-
+  import {onMount} from 'svelte';
 
   export let participant;
 
@@ -10,7 +9,7 @@
   let audioTrack = null;
 
   const trackSubscribed = track => {
-    if (track.kind === "video") {
+    if (track.kind === 'video') {
       videoTrack = track;
       track.attach(videoElement);
     } else {
@@ -20,7 +19,7 @@
   };
 
   const trackUnsubscribed = track => {
-    if (track.kind === "video" && track === videoTrack) {
+    if (track.kind === 'video' && track === videoTrack) {
       videoTrack.detach();
       videoTrack = null;
     } else {
@@ -31,21 +30,21 @@
 
   onMount(() => {
     videoTrack = Array.from(participant.videoTracks.values())[0];
-    if (typeof videoTrack !== "undefined") {
+    if (typeof videoTrack !== 'undefined') {
       videoTrack.attach(videoElement);
     }
 
     audioTrack = Array.from(participant.audioTracks.values())[0];
-    if (typeof audioTrack !== "undefined") {
+    if (typeof audioTrack !== 'undefined') {
       audioTrack.attach(audioElement);
     }
-    
-    participant.on("trackSubscribed", trackSubscribed);
-    participant.on("trackUnsubscribed", trackUnsubscribed);
+
+    participant.on('trackSubscribed', trackSubscribed);
+    participant.on('trackUnsubscribed', trackUnsubscribed);
 
     return () => {
       participant.removeAllListeners();
-      
+
       if (videoTrack) {
         videoTrack.detach();
         videoTrack = null;
@@ -58,8 +57,12 @@
   });
 </script>
 
-<div>
-  <h2>{participant.identity}</h2>
-  <video bind:this={videoElement} />
+<button class="relative w-full overflow-hidden rounded-2xl">
+  <video bind:this={videoElement} class="w-full" />
   <audio bind:this={audioElement} />
-</div>
+  <span
+    class="absolute px-6 py-2 font-semibold text-white bg-black bg-opacity-25 rounded-full shadow-2xl bottom-2 left-2 backdrop-blur-lg backdrop-filter"
+  >
+    {participant.identity}
+  </span>
+</button>
