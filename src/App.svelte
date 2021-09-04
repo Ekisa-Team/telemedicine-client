@@ -1,57 +1,20 @@
 <script>
-  import Header from './components/Header.svelte';
-  import Room from './components/Room.svelte';
-  import WavesShape from './components/WavesShape.svelte';
-
-  let identity = '';
-  let roomName = '';
-  let token = null;
-
-  const handleSubmit = async () => {
-    const url = `https://telemedicine-twilio-server.herokuapp.com/api/token-service?identity=${identity}`;
-    const res = await fetch(url);
-    const {accessToken} = await res.json();
-    token = accessToken;
-  };
-
-  const destroyToken = () => {
-    token = null;
-  };
+  import {Route, Router} from 'svelte-navigator';
+  import Home from './routes/home.svelte';
 </script>
 
-<Header />
-<WavesShape />
+<Router>
+  <main>
+    <Route path="/">
+      <Home />
+    </Route>
 
-<h1>sadfsdf</h1>
-
-{#if token}
-  <Room {token} {roomName} {destroyToken} />
-{:else}
-  <form on:submit|preventDefault={handleSubmit}>
-    <div>
-      <label for="identity">Username:</label>
-      <input
-        name="identity"
-        id="identity"
-        type="text"
-        required
-        bind:value={identity}
-      />
-    </div>
-    <div>
-      <label for="room-name">Room name:</label>
-      <input
-        name="room-name"
-        id="identity"
-        type="text"
-        required
-        bind:value={roomName}
-      />
-    </div>
-
-    <button type="submit">Log in</button>
-  </form>
-{/if}
+    <Route path="about">
+      <h3>About</h3>
+      <p>That's what it's all abouts!</p>
+    </Route>
+  </main>
+</Router>
 
 <style global lang="postcss">
   @tailwind base;

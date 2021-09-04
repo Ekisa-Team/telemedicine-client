@@ -2,6 +2,7 @@ import json from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
 import dotenv from 'dotenv';
 import commonjs from 'rollup-plugin-commonjs';
+import copy from 'rollup-plugin-copy';
 import livereload from 'rollup-plugin-livereload';
 import builtins from 'rollup-plugin-node-builtins';
 import resolve from 'rollup-plugin-node-resolve';
@@ -27,13 +28,16 @@ export default {
     replace({
       TOKEN_URL: process.env.TOKEN_URL
     }),
+    copy({
+      targets: [{src: 'public/index.html', dest: 'public', rename: '200.html'}]
+    }),
     svelte({
       // enable run-time checks when not in production
       dev: !production,
       // we'll extract any component CSS out into
       // a separate file — better for performance
       css: css => {
-        css.write('public/build/bundle.css');
+        css.write('bundle.css');
       },
       preprocess: sveltePreprocess({
         sourceMap: !production,
