@@ -57,7 +57,7 @@
   });
 </script>
 
-<button class="relative w-full h-full overflow-hidden rounded-2xl">
+<div class="relative w-full h-full overflow-hidden rounded-2xl">
   <video
     bind:this={videoElement}
     class="absolute inset-0 object-fill w-full h-full"
@@ -68,4 +68,4 @@
   >
     {participant.identity}
   </span>
-</button>
+</div>
