@@ -1,46 +1,46 @@
-import json from "@rollup/plugin-json";
-import replace from "@rollup/plugin-replace";
-import dotenv from "dotenv";
-import commonjs from "rollup-plugin-commonjs";
-import livereload from "rollup-plugin-livereload";
-import builtins from "rollup-plugin-node-builtins";
-import resolve from "rollup-plugin-node-resolve";
-import svelte from "rollup-plugin-svelte";
-import { terser } from "rollup-plugin-terser";
-import sveltePreprocess from "svelte-preprocess";
+import json from '@rollup/plugin-json';
+import replace from '@rollup/plugin-replace';
+import dotenv from 'dotenv';
+import commonjs from 'rollup-plugin-commonjs';
+import livereload from 'rollup-plugin-livereload';
+import builtins from 'rollup-plugin-node-builtins';
+import resolve from 'rollup-plugin-node-resolve';
+import svelte from 'rollup-plugin-svelte';
+import {terser} from 'rollup-plugin-terser';
+import sveltePreprocess from 'svelte-preprocess';
 
 dotenv.config();
 
 const production = !process.env.ROLLUP_WATCH;
 
 export default {
-  input: "src/main.js",
+  input: 'src/main.js',
   output: {
     sourcemap: true,
-    format: "iife",
-    name: "app",
-    file: "public/build/bundle.js",
+    format: 'iife',
+    name: 'app',
+    file: 'public/build/bundle.js'
   },
   plugins: [
     builtins(),
     json(),
     replace({
-      TOKEN_URL: process.env.TOKEN_URL,
+      TOKEN_URL: process.env.TOKEN_URL
     }),
     svelte({
       // enable run-time checks when not in production
       dev: !production,
       // we'll extract any component CSS out into
       // a separate file — better for performance
-      css: (css) => {
-        css.write("public/build/bundle.css");
+      css: css => {
+        css.write('public/build/bundle.css');
       },
       preprocess: sveltePreprocess({
         sourceMap: !production,
         postcss: {
-          plugins: [require("tailwindcss"), require("autoprefixer")],
-        },
-      }),
+          plugins: [require('tailwindcss'), require('autoprefixer')]
+        }
+      })
     }),
 
     // If you have external dependencies installed from
@@ -50,8 +50,8 @@ export default {
     // https://github.com/rollup/rollup-plugin-commonjs
     resolve({
       browser: true,
-      dedupe: (importee) =>
-        importee === "svelte" || importee.startsWith("svelte/"),
+      dedupe: importee =>
+        importee === 'svelte' || importee.startsWith('svelte/')
     }),
     commonjs(),
 
@@ -61,15 +61,15 @@ export default {
 
     // Watch the `public` directory and refresh the
     // browser on changes when not in production
-    !production && livereload("public"),
+    !production && livereload('public'),
 
     // If we're building for production (npm run build
     // instead of npm run dev), minify
-    production && terser(),
+    production && terser()
   ],
   watch: {
-    clearScreen: false,
-  },
+    clearScreen: false
+  }
 };
 
 function serve() {
@@ -80,11 +80,11 @@ function serve() {
       if (!started) {
         started = true;
 
-        require("child_process").spawn("npm", ["run", "start", "--", "--dev"], {
-          stdio: ["ignore", "inherit", "inherit"],
-          shell: true,
+        require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
+          stdio: ['ignore', 'inherit', 'inherit'],
+          shell: true
         });
       }
-    },
+    }
   };
 }

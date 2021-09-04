@@ -1,26 +1,26 @@
 module.exports = {
-  mode: "jit",
-  purge: ["./src/**/*.svelte"],
+  mode: 'jit',
+  purge: ['./src/**/*.svelte'],
   darkMode: false, // or 'media' or 'class'
   theme: {
     fontFamily: {
-      display: ["Oswald", "sans-serif"],
-      body: ["Poppins", "sans-serif"],
+      display: ['Oswald', 'sans-serif'],
+      body: ['Poppins', 'sans-serif']
     },
     container: {
       center: true,
-      padding: "1.5rem",
+      padding: '1.5rem'
     },
     extends: {
       color: {
-        inherit: "inherit",
-        transparent: "transparent",
-        current: "currentColor",
-      },
-    },
+        inherit: 'inherit',
+        transparent: 'transparent',
+        current: 'currentColor'
+      }
+    }
   },
   variants: {
-    extend: {},
+    extend: {}
   },
-  plugins: [],
+  plugins: []
 };
