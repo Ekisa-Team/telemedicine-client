@@ -1,8 +1,7 @@
 <script>
-  import { onMount } from "svelte";
-  import Video from "twilio-video";
-  import Participant from "./Participant.svelte";
-
+  import {onMount} from 'svelte';
+  import Video from 'twilio-video';
+  import Participant from './Participant.svelte';
 
   export let token;
   export let roomName;
@@ -26,12 +25,12 @@
   };
 
   onMount(async () => {
-    room = await Video.connect(token, { name: roomName });
+    room = await Video.connect(token, {name: roomName});
     participants = Array.from(room.participants.values());
-    room.on("participantConnected", participant => {
+    room.on('participantConnected', participant => {
       participants = [...participants, participant];
     });
-    room.on("participantDisconnected", participant => {
+    room.on('participantDisconnected', participant => {
       participants = participants.filter(p => p !== participant);
     });
     return () => {
