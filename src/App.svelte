@@ -1,25 +1,6 @@
 <script>
 	import Room from './components/Room.svelte';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
   let identity = ''
   let roomName = ''
   let token = null
