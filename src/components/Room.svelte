@@ -82,7 +82,7 @@
     });
 
     return () => {
-      disconnect();
+      leaveRoom();
     };
   });
 </script>
@@ -106,21 +106,26 @@
       </VideoGrid>
 
       <StreamControls on:click={handleControlClick}>
-        <StreamControl
-          icon={audio.enabled ? 'uil uil-microphone' : 'uil uil-microphone-slash'}
-          cssClass={!audio.enabled ? 'bg-red-500' : ''}
-          on:click={() => handleControlClick('audio')}
-        />
-        <StreamControl
-          icon={video.enabled ? 'uil uil-video' : 'uil uil-video-slash'}
-          cssClass={!video.enabled ? 'bg-red-500' : ''}
-          on:click={() => handleControlClick('video')}
-        />
-        <StreamControl
-          icon="uil-phone-times"
-          cssClass="w-20 h-12 bg-red-500 hover:bg-red-400"
-          on:click={() => handleControlClick('hangup')}
-        />
+        <svelte:fragment slot="left" />
+        <svelte:fragment slot="center">
+          <StreamControl
+            icon={audio.enabled ? 'uil uil-microphone' : 'uil uil-microphone-slash'}
+            cssClass={!audio.enabled ? 'bg-red-500' : ''}
+            on:click={() => handleControlClick('audio')}
+          />
+
+          <StreamControl
+            icon={video.enabled ? 'uil uil-video' : 'uil uil-video-slash'}
+            cssClass={!video.enabled ? 'bg-red-500' : ''}
+            on:click={() => handleControlClick('video')}
+          />
+          <StreamControl
+            icon="uil-phone-times"
+            cssClass="w-20 h-12 bg-red-500 hover:bg-red-400"
+            on:click={() => handleControlClick('hangup')}
+          />
+        </svelte:fragment>
+        <svelte:fragment slot="right" />
       </StreamControls>
     </div>
 
