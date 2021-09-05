@@ -1,11 +1,22 @@
 <script>
   import {Route, Router} from 'svelte-navigator';
+  import ActualRoom from './routes/ActualRoom.svelte';
+  import Home from './routes/Home.svelte';
   import PreJoin from './routes/PreJoin.svelte';
 </script>
 
 <Router>
   <Route path="/">
+    <Home />
+  </Route>
+  <Route path="/pre-join">
     <PreJoin />
+  </Route>
+  <Route path="/pre-join/:roomName">
+    <PreJoin />
+  </Route>
+  <Route path="/room/:roomName">
+    <ActualRoom />
   </Route>
 </Router>
 
@@ -43,61 +54,5 @@
     @apply font-display;
     @apply font-bold;
     @apply mt-0;
-  }
-
-  h1,
-  .h1 {
-    @apply text-4xl;
-    @apply mb-12;
-  }
-
-  h2,
-  .h2 {
-    @apply text-3xl;
-    @apply mb-10;
-  }
-
-  h3,
-  .h3 {
-    @apply text-2xl;
-    @apply mb-8;
-  }
-
-  h4,
-  .h4 {
-    @apply text-xl;
-    @apply mb-6;
-  }
-
-  h5,
-  .h5 {
-    @apply text-lg;
-    @apply mb-4;
-  }
-
-  h6,
-  .h6 {
-    @apply text-base;
-    @apply mb-2;
-  }
-
-  .display-1 {
-    @apply text-8xl;
-    @apply mb-32;
-  }
-
-  .display-2 {
-    @apply text-7xl;
-    @apply mb-24;
-  }
-
-  .display-3 {
-    @apply text-6xl;
-    @apply mb-20;
-  }
-
-  .display-4 {
-    @apply text-5xl;
-    @apply mb-16;
   }
 </style>

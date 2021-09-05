@@ -1,35 +1,32 @@
 <script>
-  import JoinRoom from '../components/JoinRoom.svelte';
-  import Header from './../components/Header.svelte';
-  import Room from './../components/Room.svelte';
-  import WavesShape from './../components/WavesShape.svelte';
+  import queryString from 'query-string';
+  import {navigate, useParams} from 'svelte-navigator';
+  import {v4} from 'uuid';
+  import JoinForm from '../components/JoinForm.svelte';
 
-  let roomName = 'test-room';
-  let enterWithVideo = true;
-  let enterWithAudio = true;
-  let token = null;
+  let queryParams;
+  $: queryParams = queryString.parse(window.location.search);
+
+  const params = useParams();
 
   const handleJoin = async ({detail}) => {
-    enterWithVideo = detail.enterWithVideo;
-    enterWithAudio = detail.enterWithAudio;
-
+    const isHost = queryParams.isHost ? JSON.parse(queryParams.isHost.toLowerCase()) : false;
     const newIdentity = `${detail.identity}-${Math.random()}`;
+    const roomName = $params.roomName ? $params.roomName : v4();
 
-    const url = `https://telemedicine-twilio-server.herokuapp.com/api/token-service?identity=${newIdentity}`;
-    const res = await fetch(url);
-    const {accessToken} = await res.json();
-    token = accessToken;
-  };
-
-  const destroyToken = () => {
-    token = null;
+    navigate(
+      `/room/${roomName}?isHost=${isHost}&identity=${newIdentity}&enterWithVideo=${detail.enterWithVideo}&enterWithAudio=${detail.enterWithAudio}`
+    );
   };
 </script>
 
-{#if token}
-  <Room {token} {roomName} {enterWithVideo} {enterWithAudio} {destroyToken} />
-{:else}
-  <Header />
-  <WavesShape />
-  <JoinRoom on:join={handleJoin} />
-{/if}
+<div class="container pt-40 text-center">
+  <div class="mb-12">
+    <h2 class="text-base font-body">Elija su configuración de audio y video para</h2>
+    <h1 class="h4">Unirse a la Reunion</h1>
+  </div>
+
+  <div class="flex items-end max-w-lg p-6 mx-auto shadow-2xl h-96">
+    <JoinForm on:join={handleJoin} />
+  </div>
+</div>
