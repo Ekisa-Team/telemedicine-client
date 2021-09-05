@@ -66,7 +66,9 @@
     room = await Video.connect(token, {name: roomName});
     participants = Array.from(room.participants.values());
     room.on('participantConnected', participant => {
-      participants = [...participants, participant];
+      if (confirm(`${participant.identity} quiere conectarse.`)) {
+        participants = [...participants, participant];
+      }
     });
     room.on('participantDisconnected', participant => {
       participants = participants.filter(p => p !== participant);
