@@ -10,7 +10,8 @@
   const handleLogin = async ({detail}) => {
     console.log(detail);
     roomName = detail.roomName;
-    const url = `https://telemedicine-twilio-server.herokuapp.com/api/token-service?identity=${detail.identity}`;
+    const newIdentity = `${detail.identity}-${Math.random()}`;
+    const url = `https://telemedicine-twilio-server.herokuapp.com/api/token-service?identity=${newIdentity}`;
     const res = await fetch(url);
     const {accessToken} = await res.json();
     token = accessToken;

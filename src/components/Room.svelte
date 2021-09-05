@@ -4,6 +4,7 @@
   import Participant from './Participant.svelte';
   import Sidebar from './Sidebar.svelte';
   import StreamControls from './StreamControls.svelte';
+  import VideoGrid from './VideoGrid.svelte';
 
   export let token;
   export let roomName;
@@ -29,8 +30,14 @@
   const handleControlClick = ({detail}) => {
     switch (detail.kind) {
       case 'microphone':
+        room.localParticipant.audioTracks.forEach(track =>
+          track.isEnabled ? track.disable() : track.enable()
+        );
         break;
       case 'video':
+        room.localParticipant.videoTracks.forEach(track =>
+          track.isEnabled ? track.disable() : track.enable()
+        );
         break;
       case 'hangup':
         leaveRoom();
@@ -53,22 +60,18 @@
   });
 </script>
 
-{#if room !== null}
-  <!-- <button on:click={leaveRoom}>Leave room</button> -->
-
+{#if room}
   <div class="grid h-full grid-cols-3 gap-12 p-6 bg-gray-900">
-    <div class="h-full col-span-2">
-      <div class="relative mb-12" style="height: 80vh;">
-        <Participant participant={room.localParticipant} />
+    <div class="col-span-2 space-y-8" style="height: 90%;">
+      <VideoGrid layout="sidebar">
+        <!-- Local participant -->
+        <Participant participant={room.localParticipant} muted={true} />
 
-        <div class="absolute border-4 border-white top-4 right-4 rounded-2xl">
-          {#each participants as participant}
-            <div class="w-48 h-48">
-              <Participant {participant} />
-            </div>
-          {/each}
-        </div>
-      </div>
+        <!-- Remote participants -->
+        {#each participants as participant}
+          <Participant {participant} />
+        {/each}
+      </VideoGrid>
 
       <StreamControls on:click={handleControlClick} />
     </div>
