@@ -5,7 +5,7 @@
   import {Button, InputGroup, InputGroupText, Input} from 'sveltestrap';
 
   const handleNewMeetingClick = () => {
-    navigate('/pre-join');
+    navigate('/pre-join?isHost=true');
   };
 </script>
 

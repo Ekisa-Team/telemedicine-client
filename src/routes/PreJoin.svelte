@@ -1,8 +1,20 @@
 <script>
+  import queryString from 'query-string';
+  import {navigate} from 'svelte-navigator';
+  import {v4} from 'uuid';
   import JoinForm from '../components/JoinForm.svelte';
 
+  let queryParams;
+  $: queryParams = queryString.parse(window.location.search);
+
   const handleJoin = async ({detail}) => {
-    console.log(detail);
+    const isHost = JSON.parse(queryParams.isHost.toLowerCase());
+    const roomName = v4();
+    const newIdentity = `${detail.identity}-${Math.random()}`;
+
+    navigate(
+      `/room/${roomName}?isHost=${isHost}&identity=${newIdentity}&enterWithVideo=${detail.enterWithVideo}&enterWithAudio=${detail.enterWithAudio}`
+    );
   };
 </script>
 
