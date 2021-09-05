@@ -1,35 +1,18 @@
 <script>
-  import JoinRoom from '../components/JoinRoom.svelte';
-  import Header from './../components/Header.svelte';
-  import Room from './../components/Room.svelte';
-  import WavesShape from './../components/WavesShape.svelte';
-
-  let roomName = 'test-room';
-  let enterWithVideo = true;
-  let enterWithAudio = true;
-  let token = null;
+  import JoinForm from '../components/JoinForm.svelte';
 
   const handleJoin = async ({detail}) => {
-    enterWithVideo = detail.enterWithVideo;
-    enterWithAudio = detail.enterWithAudio;
-
-    const newIdentity = `${detail.identity}-${Math.random()}`;
-
-    const url = `https://telemedicine-twilio-server.herokuapp.com/api/token-service?identity=${newIdentity}`;
-    const res = await fetch(url);
-    const {accessToken} = await res.json();
-    token = accessToken;
-  };
-
-  const destroyToken = () => {
-    token = null;
+    console.log(detail);
   };
 </script>
 
-{#if token}
-  <Room {token} {roomName} {enterWithVideo} {enterWithAudio} {destroyToken} />
-{:else}
-  <Header />
-  <WavesShape />
-  <JoinRoom on:join={handleJoin} />
-{/if}
+<div class="container pt-40 text-center">
+  <div class="mb-12">
+    <h2 class="text-base font-body">Elija su configuración de audio y video para</h2>
+    <h1 class="h4">Unirse a la Reunion</h1>
+  </div>
+
+  <div class="flex items-end max-w-lg p-6 mx-auto shadow-2xl h-96">
+    <JoinForm on:join={handleJoin} />
+  </div>
+</div>
