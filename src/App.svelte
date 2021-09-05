@@ -1,11 +1,11 @@
 <script>
   import {Route, Router} from 'svelte-navigator';
-  import Home from './routes/home.svelte';
+  import PreJoin from './routes/PreJoin.svelte';
 </script>
 
 <Router>
   <Route path="/">
-    <Home />
+    <PreJoin />
   </Route>
 </Router>
 
