@@ -12,6 +12,9 @@
   <Route path="/pre-join">
     <PreJoin />
   </Route>
+  <Route path="/pre-join/:roomName">
+    <PreJoin />
+  </Route>
   <Route path="/room/:roomName">
     <ActualRoom />
   </Route>

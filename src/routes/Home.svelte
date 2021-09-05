@@ -1,11 +1,19 @@
 <script>
-  import Header from './../components/Header.svelte';  
-  import WavesShape from './../components/WavesShape.svelte';
   import {navigate} from 'svelte-navigator';
-  import {Button, InputGroup, InputGroupText, Input} from 'sveltestrap';
+  import {Button, Input, InputGroup, InputGroupText} from 'sveltestrap';
+  import Header from './../components/Header.svelte';
+  import WavesShape from './../components/WavesShape.svelte';
+
+  let roomName = '';
 
   const handleNewMeetingClick = () => {
     navigate('/pre-join?isHost=true');
+  };
+
+  const handleJoinMeetingClick = () => {
+    if (roomName) {
+      navigate(`/pre-join/${roomName}`);
+    }
   };
 </script>
 
@@ -34,9 +42,9 @@
       <InputGroupText>
         <i class="text-2xl uil uil-keyboard" />
       </InputGroupText>
-      <Input placeholder="Ingresa el código de la reunión" size="lg" />
+      <Input placeholder="Ingresa el código de la reunión" size="lg" bind:value={roomName} />
     </InputGroup>
-    <Button color="primary" size="lg" outline class="mt-2">
+    <Button color="primary" size="lg" outline class="mt-2" on:click={handleJoinMeetingClick}>
       <i class="text-2xl uil uil-smile" />
       Unirme
     </Button>
