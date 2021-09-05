@@ -3,6 +3,7 @@
   import Video from 'twilio-video';
   import Participant from './Participant.svelte';
   import Sidebar from './Sidebar.svelte';
+  import StreamControl from './StreamControl.svelte';
   import StreamControls from './StreamControls.svelte';
   import VideoGrid from './VideoGrid.svelte';
 
@@ -12,6 +13,9 @@
 
   let room = null;
   let participants = [];
+
+  let microphone = {enabled: true};
+  let video = {enabled: true};
 
   const disconnect = () => {
     if (room) {
@@ -27,17 +31,30 @@
     destroyToken();
   };
 
-  const handleControlClick = ({detail}) => {
-    switch (detail.kind) {
+  const handleControlClick = kind => {
+    switch (kind) {
       case 'microphone':
-        room.localParticipant.audioTracks.forEach(track =>
-          track.isEnabled ? track.disable() : track.enable()
-        );
+        console.log(room.localParticipant.audioTracks);
+        room.localParticipant.audioTracks.forEach(track => {
+          if (track.isEnabled) {
+            track.disable();
+            microphone.enabled = false;
+          } else {
+            track.enable();
+            microphone.enabled = true;
+          }
+        });
         break;
       case 'video':
-        room.localParticipant.videoTracks.forEach(track =>
-          track.isEnabled ? track.disable() : track.enable()
-        );
+        room.localParticipant.videoTracks.forEach(track => {
+          if (track.isEnabled) {
+            track.disable();
+            video.enabled = false;
+          } else {
+            track.enable();
+            video.enabled = true;
+          }
+        });
         break;
       case 'hangup':
         leaveRoom();
@@ -73,7 +90,23 @@
         {/each}
       </VideoGrid>
 
-      <StreamControls on:click={handleControlClick} />
+      <StreamControls on:click={handleControlClick}>
+        <StreamControl
+          icon={microphone.enabled ? 'uil uil-microphone' : 'uil uil-microphone-slash'}
+          cssClass={!microphone.enabled ? 'bg-red-500' : ''}
+          on:click={() => handleControlClick('microphone')}
+        />
+        <StreamControl
+          icon={video.enabled ? 'uil uil-video' : 'uil uil-video-slash'}
+          cssClass={!video.enabled ? 'bg-red-500' : ''}
+          on:click={() => handleControlClick('video')}
+        />
+        <StreamControl
+          icon="uil-phone-times"
+          cssClass="w-20 h-12 bg-red-500 hover:bg-red-400"
+          on:click={() => handleControlClick('hangup')}
+        />
+      </StreamControls>
     </div>
 
     <Sidebar />

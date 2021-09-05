@@ -12,7 +12,7 @@
     @apply relative;
   }
 
-  #video-grid.sidebar > :global(div:first-child) {
+  #video-grid.sidebar > :global(div:first-child:not(:only-child)) {
     @apply absolute;
     @apply top-4;
     @apply right-4;
@@ -21,5 +21,8 @@
     @apply border-2;
     @apply border-white;
     @apply z-10;
+    @apply transition-all;
+    @apply ease-out;
+    @apply duration-700;
   }
 </style>
