@@ -3,6 +3,8 @@
 
   export let participant;
   export let muted = false;
+  export let enterWithVideo;
+  export let enterWithAudio;
 
   let videoElement;
   let audioElement;
@@ -38,11 +40,13 @@
     videoTrack = Array.from(participant.videoTracks.values())[0];
     if (typeof videoTrack !== 'undefined') {
       videoTrack.attach(videoElement);
+      enterWithVideo ? videoTrack.enable() : videoTrack.disable();
     }
 
     audioTrack = Array.from(participant.audioTracks.values())[0];
     if (typeof audioTrack !== 'undefined') {
       audioTrack.attach(audioElement);
+      enterWithAudio ? audioTrack.enable() : audioTrack.disable();
     }
 
     participant.on('trackSubscribed', trackSubscribed);

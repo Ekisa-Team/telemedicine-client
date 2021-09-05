@@ -1,15 +1,20 @@
 <script>
+  import JoinRoom from '../components/JoinRoom.svelte';
   import Header from './../components/Header.svelte';
-  import JoinRoomForm from './../components/JoinRoomForm.svelte';
   import Room from './../components/Room.svelte';
   import WavesShape from './../components/WavesShape.svelte';
 
-  let roomName = '';
+  let roomName = 'test-room';
+  let enterWithVideo = true;
+  let enterWithAudio = true;
   let token = null;
 
-  const handleLogin = async ({detail}) => {
-    roomName = detail.roomName;
+  const handleJoin = async ({detail}) => {
+    enterWithVideo = detail.enterWithVideo;
+    enterWithAudio = detail.enterWithAudio;
+
     const newIdentity = `${detail.identity}-${Math.random()}`;
+
     const url = `https://telemedicine-twilio-server.herokuapp.com/api/token-service?identity=${newIdentity}`;
     const res = await fetch(url);
     const {accessToken} = await res.json();
@@ -22,9 +27,9 @@
 </script>
 
 {#if token}
-  <Room {token} {roomName} {destroyToken} />
+  <Room {token} {roomName} {enterWithVideo} {enterWithAudio} {destroyToken} />
 {:else}
   <Header />
   <WavesShape />
-  <JoinRoomForm on:login={handleLogin} />
+  <JoinRoom on:join={handleJoin} />
 {/if}

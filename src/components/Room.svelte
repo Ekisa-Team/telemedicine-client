@@ -9,13 +9,15 @@
 
   export let token;
   export let roomName;
+  export let enterWithVideo;
+  export let enterWithAudio;
   export let destroyToken;
 
   let room = null;
   let participants = [];
 
-  let microphone = {enabled: true};
   let video = {enabled: true};
+  let audio = {enabled: true};
 
   const disconnect = () => {
     if (room) {
@@ -33,15 +35,14 @@
 
   const handleControlClick = kind => {
     switch (kind) {
-      case 'microphone':
-        console.log(room.localParticipant.audioTracks);
+      case 'audio':
         room.localParticipant.audioTracks.forEach(track => {
           if (track.isEnabled) {
             track.disable();
-            microphone.enabled = false;
+            audio.enabled = false;
           } else {
             track.enable();
-            microphone.enabled = true;
+            audio.enabled = true;
           }
         });
         break;
@@ -63,16 +64,23 @@
   };
 
   onMount(async () => {
+    video.enabled = enterWithVideo;
+    audio.enabled = enterWithAudio;
+
     room = await Video.connect(token, {name: roomName});
+
     participants = Array.from(room.participants.values());
+
     room.on('participantConnected', participant => {
       if (confirm(`${participant.identity} quiere conectarse.`)) {
         participants = [...participants, participant];
       }
     });
+
     room.on('participantDisconnected', participant => {
       participants = participants.filter(p => p !== participant);
     });
+
     return () => {
       disconnect();
     };
@@ -84,7 +92,12 @@
     <div class="col-span-2 space-y-8" style="height: 90%;">
       <VideoGrid layout="sidebar">
         <!-- Local participant -->
-        <Participant participant={room.localParticipant} muted={true} />
+        <Participant
+          participant={room.localParticipant}
+          muted={true}
+          {enterWithVideo}
+          {enterWithAudio}
+        />
 
         <!-- Remote participants -->
         {#each participants as participant}
@@ -94,9 +107,9 @@
 
       <StreamControls on:click={handleControlClick}>
         <StreamControl
-          icon={microphone.enabled ? 'uil uil-microphone' : 'uil uil-microphone-slash'}
-          cssClass={!microphone.enabled ? 'bg-red-500' : ''}
-          on:click={() => handleControlClick('microphone')}
+          icon={audio.enabled ? 'uil uil-microphone' : 'uil uil-microphone-slash'}
+          cssClass={!audio.enabled ? 'bg-red-500' : ''}
+          on:click={() => handleControlClick('audio')}
         />
         <StreamControl
           icon={video.enabled ? 'uil uil-video' : 'uil uil-video-slash'}
