@@ -3,7 +3,6 @@
   import {navigate} from 'svelte-navigator';
   import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from 'sveltestrap';
   import Video from 'twilio-video';
-  import {getParticipantName} from '../utils/room.utils';
   import Participant from './Participant.svelte';
   import Sidebar from './Sidebar.svelte';
   import StreamControl from './StreamControl.svelte';
@@ -25,20 +24,33 @@
   let audio = {enabled: true};
 
   let copyDropDownOpen = false;
+  // let confirmDialogOpen = false;
+  // let tempParticipant = null;
+  // let tempIdentity = null;
 
   onMount(async () => {
     video.enabled = enterWithVideo;
     audio.enabled = enterWithAudio;
+
+    console.log('inputs', {
+      token,
+      roomName,
+      isHost,
+      enterWithVideo,
+      enterWithAudio,
+      destroyToken
+    });
 
     room = await Video.connect(token, {name: roomName});
 
     participants = Array.from(room.participants.values());
 
     room.on('participantConnected', participant => {
-      const name = getParticipantName(participant.identity);
-      if (confirm(`${name} quiere conectarse.`)) {
-        participants = [...participants, participant];
-      }
+      participants = [...participants, participant];
+
+      // tempParticipant = participant;
+      // tempIdentity = getParticipantName(participant.identity);
+      // confirmDialogOpen = true;
     });
 
     room.on('participantDisconnected', participant => {
@@ -65,13 +77,24 @@
     navigate('/');
   };
 
+  // const handleCallAnswer = ({detail}) => {
+  //   const {accepted} = detail;
+
+  //   if (accepted) {
+  //     participants = [...participants, tempParticipant];
+  //   }
+
+  //   tempParticipant = null;
+  //   tempIdentity = null;
+  // };
+
   const copyRoom = selection => {
     let dataToCopy = '';
 
     if (selection === 'code') {
       dataToCopy = roomName;
     } else if (selection === 'link') {
-      dataToCopy = `${location.origin}${location.pathname}?roomName=${roomName}`;
+      dataToCopy = `${window.location.origin}${window.location.pathname}?roomName=${roomName}`;
     }
 
     const clipboard = new CopyToClipboard({
@@ -180,6 +203,8 @@
 
     <Sidebar />
   </div>
+
+  <!-- <ConfirmDialog open={confirmDialogOpen} identity={tempIdentity} on:answer={handleCallAnswer} /> -->
 {/if}
 
 <div id="clipboard" />
