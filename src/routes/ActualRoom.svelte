@@ -1,16 +1,15 @@
 <script>
   import queryString from 'query-string';
   import {onMount} from 'svelte';
-  import {useParams} from 'svelte-navigator';
   import Room from './../components/Room.svelte';
 
   let queryParams;
   $: queryParams = queryString.parse(window.location.search);
 
-  const params = useParams();
-
   let token = null;
   let roomName = null;
+  let isHost = null;
+  let identity = null;
   let enterWithVideo = false;
   let enterWithAudio = false;
 
@@ -20,7 +19,9 @@
     const {accessToken} = await res.json();
 
     token = accessToken;
-    roomName = $params.roomName;
+    roomName = queryParams.roomName;
+    isHost = queryParams.isHost && JSON.parse(queryParams.isHost);
+    identity = queryParams.identity;
     enterWithVideo = JSON.parse(queryParams.enterWithVideo);
     enterWithAudio = JSON.parse(queryParams.enterWithAudio);
   });
@@ -31,5 +32,7 @@
 </script>
 
 {#if token}
-  <Room {token} {roomName} {enterWithVideo} {enterWithAudio} {destroyToken} />
+  <Room {token} {roomName} {isHost} {enterWithVideo} {enterWithAudio} {destroyToken} />
+{:else}
+  Loading...
 {/if}

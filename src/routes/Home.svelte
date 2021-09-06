@@ -12,7 +12,7 @@
 
   const handleJoinMeetingClick = () => {
     if (roomName) {
-      navigate(`/pre-join/${roomName}`);
+      navigate(`/pre-join?roomName=${roomName}`);
     }
   };
 </script>

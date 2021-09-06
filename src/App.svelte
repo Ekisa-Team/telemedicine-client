@@ -1,5 +1,6 @@
 <script>
   import {Route, Router} from 'svelte-navigator';
+  import RoomRoute from './guards/room/RoomRoute.svelte';
   import ActualRoom from './routes/ActualRoom.svelte';
   import Home from './routes/Home.svelte';
   import PreJoin from './routes/PreJoin.svelte';
@@ -12,12 +13,9 @@
   <Route path="/pre-join">
     <PreJoin />
   </Route>
-  <Route path="/pre-join/:roomName">
-    <PreJoin />
-  </Route>
-  <Route path="/room/:roomName">
+  <RoomRoute path="/room" let:location>
     <ActualRoom />
-  </Route>
+  </RoomRoute>
 </Router>
 
 <style global lang="postcss">

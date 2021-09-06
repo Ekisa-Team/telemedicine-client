@@ -10,6 +10,7 @@
 
   export let token;
   export let roomName;
+  export let isHost;
   export let enterWithVideo;
   export let enterWithAudio;
   export let destroyToken;
@@ -96,7 +97,7 @@
         <!-- Local participant -->
         <Participant
           participant={room.localParticipant}
-          muted={true}
+          isLocal={true}
           {enterWithVideo}
           {enterWithAudio}
         />

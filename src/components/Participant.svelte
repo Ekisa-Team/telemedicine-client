@@ -2,7 +2,7 @@
   import {onMount} from 'svelte';
 
   export let participant;
-  export let muted = false;
+  export let isLocal;
   export let enterWithVideo;
   export let enterWithAudio;
 
@@ -68,11 +68,19 @@
 </script>
 
 <div class="relative w-full h-full overflow-hidden rounded-2xl">
-  <video bind:this={videoElement} {muted} class="absolute inset-0 object-fill w-full h-full" />
+  <video
+    bind:this={videoElement}
+    muted={isLocal}
+    class="absolute inset-0 object-fill w-full h-full"
+  />
   <audio bind:this={audioElement} />
   <span
     class="absolute px-6 py-2 font-semibold text-white bg-white bg-opacity-25 rounded-full shadow-2xl lg:bottom-2 left-2 backdrop-blur-lg backdrop-filter"
   >
-    {participantName(participant.identity)}
+    {#if isLocal}
+      Tú
+    {:else}
+      {participantName(participant.identity)}
+    {/if}
   </span>
 </div>
