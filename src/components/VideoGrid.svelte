@@ -6,23 +6,17 @@
   <slot />
 </div>
 
-<style>
+<style lang="postcss">
   #video-grid.sidebar {
     @apply h-full;
     @apply relative;
   }
 
   #video-grid.sidebar > :global(div:first-child:not(:only-child)) {
-    @apply absolute;
-    @apply top-4;
-    @apply right-4;
-    @apply w-48;
-    @apply h-44;
-    @apply border-2;
-    @apply border-white;
+    @apply absolute top-4 right-4;
+    @apply w-48 h-44;
+    @apply border-2 border-white;
     @apply z-10;
-    @apply transition-all;
-    @apply ease-out;
-    @apply duration-700;
+    @apply transition-all ease-out duration-700;
   }
 </style>

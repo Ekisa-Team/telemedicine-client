@@ -1,5 +1,4 @@
 import json from '@rollup/plugin-json';
-import replace from '@rollup/plugin-replace';
 import dotenv from 'dotenv';
 import commonjs from 'rollup-plugin-commonjs';
 import copy from 'rollup-plugin-copy';
@@ -25,9 +24,6 @@ export default {
   plugins: [
     builtins(),
     json(),
-    replace({
-      TOKEN_URL: process.env.TOKEN_URL
-    }),
     copy({
       targets: [{src: 'public/index.html', dest: 'public', rename: '200.html'}]
     }),
@@ -54,8 +50,7 @@ export default {
     // https://github.com/rollup/rollup-plugin-commonjs
     resolve({
       browser: true,
-      dedupe: importee =>
-        importee === 'svelte' || importee.startsWith('svelte/')
+      dedupe: importee => importee === 'svelte' || importee.startsWith('svelte/')
     }),
     commonjs(),
 

@@ -1,5 +1,6 @@
 <script>
-  import {onMount} from 'svelte';
+  import {onDestroy, onMount} from 'svelte';
+  import {navigate} from 'svelte-navigator';
   import Video from 'twilio-video';
   import Participant from './Participant.svelte';
   import Sidebar from './Sidebar.svelte';
@@ -19,6 +20,29 @@
   let video = {enabled: true};
   let audio = {enabled: true};
 
+  onMount(async () => {
+    video.enabled = enterWithVideo;
+    audio.enabled = enterWithAudio;
+
+    room = await Video.connect(token, {name: roomName});
+
+    participants = Array.from(room.participants.values());
+
+    room.on('participantConnected', participant => {
+      if (confirm(`${participant.identity} quiere conectarse.`)) {
+        participants = [...participants, participant];
+      }
+    });
+
+    room.on('participantDisconnected', participant => {
+      participants = participants.filter(p => p !== participant);
+    });
+  });
+
+  onDestroy(() => {
+    disconnect();
+  });
+
   const disconnect = () => {
     if (room) {
       room.removeAllListeners();
@@ -31,6 +55,7 @@
   const leaveRoom = () => {
     disconnect();
     destroyToken();
+    navigate('/');
   };
 
   const handleControlClick = kind => {
@@ -62,29 +87,6 @@
         break;
     }
   };
-
-  onMount(async () => {
-    video.enabled = enterWithVideo;
-    audio.enabled = enterWithAudio;
-
-    room = await Video.connect(token, {name: roomName});
-
-    participants = Array.from(room.participants.values());
-
-    room.on('participantConnected', participant => {
-      if (confirm(`${participant.identity} quiere conectarse.`)) {
-        participants = [...participants, participant];
-      }
-    });
-
-    room.on('participantDisconnected', participant => {
-      participants = participants.filter(p => p !== participant);
-    });
-
-    return () => {
-      leaveRoom();
-    };
-  });
 </script>
 
 {#if room}
@@ -106,26 +108,38 @@
       </VideoGrid>
 
       <StreamControls on:click={handleControlClick}>
-        <svelte:fragment slot="left" />
+        <svelte:fragment slot="left">
+          <StreamControl
+            icon="uil uil-copy"
+            text="Copiar vínculo"
+            on:click={() => handleControlClick('copy')}
+          />
+        </svelte:fragment>
+
         <svelte:fragment slot="center">
           <StreamControl
             icon={audio.enabled ? 'uil uil-microphone' : 'uil uil-microphone-slash'}
-            cssClass={!audio.enabled ? 'bg-red-500' : ''}
+            type={audio.enabled ? 'normal' : 'danger'}
+            size="md"
             on:click={() => handleControlClick('audio')}
           />
 
           <StreamControl
             icon={video.enabled ? 'uil uil-video' : 'uil uil-video-slash'}
-            cssClass={!video.enabled ? 'bg-red-500' : ''}
+            type={video.enabled ? 'normal' : 'danger'}
+            size="md"
             on:click={() => handleControlClick('video')}
           />
+        </svelte:fragment>
+
+        <svelte:fragment slot="right">
           <StreamControl
             icon="uil-phone-times"
-            cssClass="w-20 h-12 bg-red-500 hover:bg-red-400"
+            type="danger"
+            text="Salir"
             on:click={() => handleControlClick('hangup')}
           />
         </svelte:fragment>
-        <svelte:fragment slot="right" />
       </StreamControls>
     </div>
 
