@@ -30,11 +30,21 @@
     video.enabled = enterWithVideo;
     audio.enabled = enterWithAudio;
 
+    console.log('inputs', {
+      token,
+      roomName,
+      isHost,
+      enterWithVideo,
+      enterWithAudio,
+      destroyToken
+    });
+
     room = await Video.connect(token, {name: roomName});
 
     participants = Array.from(room.participants.values());
 
     room.on('participantConnected', participant => {
+      console.log('participant', participant);
       const name = getParticipantName(participant.identity);
       if (confirm(`${name} quiere conectarse.`)) {
         participants = [...participants, participant];
