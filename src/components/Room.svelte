@@ -1,12 +1,14 @@
 <script>
   import {onDestroy, onMount} from 'svelte';
   import {navigate} from 'svelte-navigator';
+  import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from 'sveltestrap';
   import Video from 'twilio-video';
   import {getParticipantName} from '../utils/room.utils';
   import Participant from './Participant.svelte';
   import Sidebar from './Sidebar.svelte';
   import StreamControl from './StreamControl.svelte';
   import StreamControls from './StreamControls.svelte';
+  import CopyToClipboard from './utils/CopyToClipboard.svelte';
   import VideoGrid from './VideoGrid.svelte';
 
   export let token;
@@ -21,6 +23,8 @@
 
   let video = {enabled: true};
   let audio = {enabled: true};
+
+  let copyDropDownOpen = false;
 
   onMount(async () => {
     video.enabled = enterWithVideo;
@@ -61,8 +65,28 @@
     navigate('/');
   };
 
+  const copyRoom = selection => {
+    let dataToCopy = '';
+
+    if (selection === 'code') {
+      dataToCopy = roomName;
+    } else if (selection === 'link') {
+      dataToCopy = `${location.origin}${location.pathname}?roomName=${roomName}`;
+    }
+
+    const clipboard = new CopyToClipboard({
+      target: document.querySelector('#clipboard'),
+      props: {name: dataToCopy}
+    });
+
+    clipboard.$destroy();
+  };
+
   const handleControlClick = kind => {
     switch (kind) {
+      case 'copy':
+        copyRoomName();
+        break;
       case 'audio':
         room.localParticipant.audioTracks.forEach(track => {
           if (track.isEnabled) {
@@ -112,11 +136,19 @@
 
       <StreamControls on:click={handleControlClick}>
         <svelte:fragment slot="left">
-          <StreamControl
-            icon="uil uil-copy"
-            text="Copiar vínculo"
-            on:click={() => handleControlClick('copy')}
-          />
+          <Dropdown
+            direction="up"
+            isOpen={copyDropDownOpen}
+            toggle={() => (copyDropDownOpen = !copyDropDownOpen)}
+          >
+            <DropdownToggle tag="div" class="inline-block">
+              <StreamControl icon="uil uil-copy" text="Copiar" />
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem on:click={() => copyRoom('code')}>Código de la reunión</DropdownItem>
+              <DropdownItem on:click={() => copyRoom('link')}>Vínculo de la reunión</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </svelte:fragment>
 
         <svelte:fragment slot="center">
@@ -149,3 +181,5 @@
     <Sidebar />
   </div>
 {/if}
+
+<div id="clipboard" />

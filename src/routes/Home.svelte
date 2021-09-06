@@ -27,7 +27,7 @@
     <h2 class="my-2 text-blue-700">Fácil y segura</h2>
 
     <p class="text-justify text-gray-500">
-      A continuación elija entre crear una reunión nueva o unirse a su cita designada, ingresando el
+      A continuación elija entre crear una reunión nueva o unirse a su cita asignada, ingresando el
       código de la reunión que le proporcionaron.
     </p>
 

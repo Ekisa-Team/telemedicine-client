@@ -8,7 +8,6 @@
   $: queryParams = queryString.parse($location.search);
 
   $: {
-    console.log(queryParams);
     if (!queryParams.roomName) {
       navigate('/', {
         state: {from: $location.pathname},

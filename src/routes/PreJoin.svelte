@@ -24,7 +24,7 @@
     <h1 class="h4">Unirse a la Reunion</h1>
   </div>
 
-  <div class="flex items-end max-w-lg p-6 mx-auto shadow-2xl h-96">
+  <div class="flex items-end h-64 max-w-lg p-6 mx-auto shadow-2xl">
     <JoinForm on:join={handleJoin} />
   </div>
 </div>
