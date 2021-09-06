@@ -2,6 +2,7 @@
   import {onDestroy, onMount} from 'svelte';
   import {navigate} from 'svelte-navigator';
   import Video from 'twilio-video';
+  import {getParticipantName} from '../utils/room.utils';
   import Participant from './Participant.svelte';
   import Sidebar from './Sidebar.svelte';
   import StreamControl from './StreamControl.svelte';
@@ -30,7 +31,8 @@
     participants = Array.from(room.participants.values());
 
     room.on('participantConnected', participant => {
-      if (confirm(`${participant.identity} quiere conectarse.`)) {
+      const name = getParticipantName(participant.identity);
+      if (confirm(`${name} quiere conectarse.`)) {
         participants = [...participants, participant];
       }
     });

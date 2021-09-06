@@ -1,5 +1,6 @@
 <script>
   import {onMount} from 'svelte';
+  import {getParticipantName} from '../utils/room.utils';
 
   export let participant;
   export let isLocal;
@@ -29,11 +30,6 @@
       audioTrack.detach();
       audioTrack = null;
     }
-  };
-
-  const participantName = identity => {
-    const name = identity.split('-')[0];
-    return name;
   };
 
   onMount(() => {
@@ -67,7 +63,7 @@
   });
 </script>
 
-<div class="relative w-full h-full overflow-hidden rounded-2xl">
+<div class="relative w-full h-full overflow-hidden rounded-2xl" class:local-participant={isLocal}>
   <video
     bind:this={videoElement}
     muted={isLocal}
@@ -80,7 +76,7 @@
     {#if isLocal}
       Tú
     {:else}
-      {participantName(participant.identity)}
+      {getParticipantName(participant.identity)}
     {/if}
   </span>
 </div>
