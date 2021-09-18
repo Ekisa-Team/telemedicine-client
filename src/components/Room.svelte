@@ -24,9 +24,6 @@
   let audio = {enabled: true};
 
   let copyDropDownOpen = false;
-  // let confirmDialogOpen = false;
-  // let tempParticipant = null;
-  // let tempIdentity = null;
 
   onMount(async () => {
     video.enabled = enterWithVideo;
@@ -47,10 +44,6 @@
 
     room.on('participantConnected', participant => {
       participants = [...participants, participant];
-
-      // tempParticipant = participant;
-      // tempIdentity = getParticipantName(participant.identity);
-      // confirmDialogOpen = true;
     });
 
     room.on('participantDisconnected', participant => {
@@ -76,17 +69,6 @@
     destroyToken();
     navigate('/');
   };
-
-  // const handleCallAnswer = ({detail}) => {
-  //   const {accepted} = detail;
-
-  //   if (accepted) {
-  //     participants = [...participants, tempParticipant];
-  //   }
-
-  //   tempParticipant = null;
-  //   tempIdentity = null;
-  // };
 
   const copyRoom = selection => {
     let dataToCopy = '';
@@ -203,8 +185,4 @@
 
     <Sidebar />
   </div>
-
-  <!-- <ConfirmDialog open={confirmDialogOpen} identity={tempIdentity} on:answer={handleCallAnswer} /> -->
 {/if}
-
-<div id="clipboard" />
