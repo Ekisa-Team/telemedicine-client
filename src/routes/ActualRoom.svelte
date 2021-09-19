@@ -10,7 +10,6 @@
   let token = null;
   let roomName = null;
   let isHost = null;
-  let identity = null;
   let enterWithVideo = false;
   let enterWithAudio = false;
 
@@ -23,7 +22,6 @@
       token = accessToken;
       roomName = queryParams.roomName;
       isHost = queryParams.isHost && JSON.parse(queryParams.isHost);
-      identity = queryParams.identity;
       enterWithVideo = JSON.parse(queryParams.enterWithVideo);
       enterWithAudio = JSON.parse(queryParams.enterWithAudio);
     }, 1000);
