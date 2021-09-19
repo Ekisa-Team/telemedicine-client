@@ -1,6 +1,7 @@
 <script>
   import queryString from 'query-string';
   import {onMount} from 'svelte';
+  import Loading from './../components/Loading.svelte';
   import Room from './../components/Room.svelte';
 
   let queryParams;
@@ -18,12 +19,14 @@
     const res = await fetch(url);
     const {accessToken} = await res.json();
 
-    token = accessToken;
-    roomName = queryParams.roomName;
-    isHost = queryParams.isHost && JSON.parse(queryParams.isHost);
-    identity = queryParams.identity;
-    enterWithVideo = JSON.parse(queryParams.enterWithVideo);
-    enterWithAudio = JSON.parse(queryParams.enterWithAudio);
+    setTimeout(() => {
+      token = accessToken;
+      roomName = queryParams.roomName;
+      isHost = queryParams.isHost && JSON.parse(queryParams.isHost);
+      identity = queryParams.identity;
+      enterWithVideo = JSON.parse(queryParams.enterWithVideo);
+      enterWithAudio = JSON.parse(queryParams.enterWithAudio);
+    }, 1000);
   });
 
   const destroyToken = () => {
@@ -34,5 +37,5 @@
 {#if token}
   <Room {token} {roomName} {isHost} {enterWithVideo} {enterWithAudio} {destroyToken} />
 {:else}
-  Loading...
+  <Loading text="Ingresando a la reunión..." />
 {/if}
