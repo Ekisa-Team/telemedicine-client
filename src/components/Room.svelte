@@ -1,13 +1,12 @@
 <script>
   import {onDestroy, onMount} from 'svelte';
   import {navigate} from 'svelte-navigator';
-  import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from 'sveltestrap';
+  import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Tooltip} from 'sveltestrap';
   import Video from 'twilio-video';
   import Participant from './Participant.svelte';
   import Sidebar from './Sidebar.svelte';
   import StreamControl from './StreamControl.svelte';
   import StreamControls from './StreamControls.svelte';
-  import CopyToClipboard from './utils/CopyToClipboard.svelte';
   import VideoGrid from './VideoGrid.svelte';
 
   export let token;
@@ -24,19 +23,12 @@
   let audio = {enabled: true};
 
   let copyDropDownOpen = false;
+  let copyTooltipOpen = false;
+  let copyTooltipText = '';
 
   onMount(async () => {
     video.enabled = enterWithVideo;
     audio.enabled = enterWithAudio;
-
-    console.log('inputs', {
-      token,
-      roomName,
-      isHost,
-      enterWithVideo,
-      enterWithAudio,
-      destroyToken
-    });
 
     room = await Video.connect(token, {name: roomName});
 
@@ -70,21 +62,34 @@
     navigate('/');
   };
 
+  /**
+   * Implementa funcionalidad para copiar un valor al clipboard
+   * @param selection code | link
+   */
   const copyRoom = selection => {
+    // Establece el valor a copiar dependiendo de la selección
     let dataToCopy = '';
 
-    if (selection === 'code') {
-      dataToCopy = roomName;
-    } else if (selection === 'link') {
-      dataToCopy = `${window.location.origin}${window.location.pathname}?roomName=${roomName}`;
+    switch (selection) {
+      case 'code':
+        dataToCopy = roomName;
+        copyTooltipText = '¡Código copiado!';
+        break;
+      case 'link':
+        dataToCopy = `${window.location.origin}${window.location.pathname}?roomName=${roomName}`;
+        copyTooltipText = '¡Vínculo copiado!';
+        break;
     }
 
-    const clipboard = new CopyToClipboard({
-      target: document.querySelector('#clipboard'),
-      props: {name: dataToCopy}
-    });
+    // Copia el código / link al clipboard y muestra / oculta tooltip
+    navigator.clipboard.writeText(dataToCopy).then(() => {
+      copyTooltipOpen = true;
 
-    clipboard.$destroy();
+      setTimeout(() => {
+        copyTooltipOpen = false;
+        copyTooltipText = '';
+      }, 3000);
+    });
   };
 
   const handleControlClick = kind => {
@@ -142,6 +147,7 @@
       <StreamControls on:click={handleControlClick}>
         <svelte:fragment slot="left">
           <Dropdown
+            id="copy-button"
             direction="up"
             isOpen={copyDropDownOpen}
             toggle={() => (copyDropDownOpen = !copyDropDownOpen)}
@@ -154,6 +160,12 @@
               <DropdownItem on:click={() => copyRoom('link')}>Vínculo de la reunión</DropdownItem>
             </DropdownMenu>
           </Dropdown>
+
+          {#if copyTooltipOpen}
+            <Tooltip target="copy-button" placement="top" bind:isOpen={copyTooltipOpen}>
+              {copyTooltipText}
+            </Tooltip>
+          {/if}
         </svelte:fragment>
 
         <svelte:fragment slot="center">
