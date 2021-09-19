@@ -17,6 +17,6 @@
     @apply w-48 h-44;
     @apply border-2 border-white;
     @apply z-10;
-    @apply transition-all ease-out duration-700;
+    @apply transition-all ease-in duration-500;
   }
 </style>
