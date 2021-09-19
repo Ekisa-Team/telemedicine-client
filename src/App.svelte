@@ -52,5 +52,6 @@
     @apply font-display;
     @apply font-bold;
     @apply mt-0;
+    @apply outline-none;
   }
 </style>
