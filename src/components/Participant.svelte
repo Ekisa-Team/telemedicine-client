@@ -71,12 +71,9 @@
   />
   <audio bind:this={audioElement} />
   <span
-    class="absolute px-6 py-2 font-semibold text-white bg-white bg-opacity-25 rounded-full shadow-2xl lg:bottom-2 left-2 backdrop-blur-lg backdrop-filter"
+    class="absolute px-4 py-2 overflow-hidden font-semibold text-white bg-blue-600 rounded-full left-4 top-4 overflow-ellipsis whitespace-nowrap"
+    style="max-width: 150px;"
   >
-    {#if isLocal}
-      Tú
-    {:else}
-      {getParticipantName(participant.identity)}
-    {/if}
+    {getParticipantName(participant.identity)}
   </span>
 </div>

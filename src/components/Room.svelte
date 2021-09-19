@@ -26,6 +26,8 @@
   let copyTooltipOpen = false;
   let copyTooltipText = '';
 
+  let isSidebarOpen = false;
+
   onMount(async () => {
     video.enabled = enterWithVideo;
     audio.enabled = enterWithAudio;
@@ -127,8 +129,8 @@
 </script>
 
 {#if room}
-  <div class="grid h-full grid-cols-3 gap-12 p-6 bg-gray-900">
-    <div class="col-span-2 space-y-8" style="height: 90%;">
+  <div class="h-full p-6 bg-gray-900">
+    <div class="mb-4" style="height: 92%;">
       <VideoGrid layout="sidebar">
         <!-- Local participant -->
         <Participant
@@ -143,58 +145,70 @@
           <Participant {participant} />
         {/each}
       </VideoGrid>
-
-      <StreamControls on:click={handleControlClick}>
-        <svelte:fragment slot="left">
-          <Dropdown
-            id="copy-button"
-            direction="up"
-            isOpen={copyDropDownOpen}
-            toggle={() => (copyDropDownOpen = !copyDropDownOpen)}
-          >
-            <DropdownToggle tag="div" class="inline-block">
-              <StreamControl icon="uil uil-copy" text="Copiar" />
-            </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem on:click={() => copyRoom('code')}>Código de la reunión</DropdownItem>
-              <DropdownItem on:click={() => copyRoom('link')}>Vínculo de la reunión</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-
-          {#if copyTooltipOpen}
-            <Tooltip target="copy-button" placement="top" bind:isOpen={copyTooltipOpen}>
-              {copyTooltipText}
-            </Tooltip>
-          {/if}
-        </svelte:fragment>
-
-        <svelte:fragment slot="center">
-          <StreamControl
-            icon={audio.enabled ? 'uil uil-microphone' : 'uil uil-microphone-slash'}
-            type={audio.enabled ? 'normal' : 'danger'}
-            size="md"
-            on:click={() => handleControlClick('audio')}
-          />
-
-          <StreamControl
-            icon={video.enabled ? 'uil uil-video' : 'uil uil-video-slash'}
-            type={video.enabled ? 'normal' : 'danger'}
-            size="md"
-            on:click={() => handleControlClick('video')}
-          />
-        </svelte:fragment>
-
-        <svelte:fragment slot="right">
-          <StreamControl
-            icon="uil-phone-times"
-            type="danger"
-            text="Salir"
-            on:click={() => handleControlClick('hangup')}
-          />
-        </svelte:fragment>
-      </StreamControls>
     </div>
 
-    <Sidebar />
+    <StreamControls on:click={handleControlClick}>
+      <svelte:fragment slot="left">
+        <Dropdown
+          id="copy-button"
+          direction="up"
+          isOpen={copyDropDownOpen}
+          toggle={() => (copyDropDownOpen = !copyDropDownOpen)}
+        >
+          <DropdownToggle tag="div" class="inline-block">
+            <StreamControl icon="uil uil-copy" text="Copiar" />
+          </DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem on:click={() => copyRoom('code')}>Código de la reunión</DropdownItem>
+            <DropdownItem on:click={() => copyRoom('link')}>Vínculo de la reunión</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+
+        {#if copyTooltipOpen}
+          <Tooltip target="copy-button" placement="top" bind:isOpen={copyTooltipOpen}>
+            {copyTooltipText}
+          </Tooltip>
+        {/if}
+      </svelte:fragment>
+
+      <svelte:fragment slot="center">
+        <StreamControl
+          icon={audio.enabled ? 'uil uil-microphone' : 'uil uil-microphone-slash'}
+          tooltip={audio.enabled ? 'Desactivar micrófono' : 'Activar micrófono'}
+          type={audio.enabled ? 'normal' : 'danger'}
+          size="md"
+          on:click={() => handleControlClick('audio')}
+        />
+
+        <StreamControl
+          id="video-control"
+          icon={video.enabled ? 'uil uil-video' : 'uil uil-video-slash'}
+          tooltip={video.enabled ? 'Desactivar cámara' : 'Activar cámara'}
+          type={video.enabled ? 'normal' : 'danger'}
+          size="md"
+          on:click={() => handleControlClick('video')}
+        />
+
+        <StreamControl
+          icon="uil-phone-times"
+          type="danger"
+          text="Salir"
+          on:click={() => handleControlClick('hangup')}
+        />
+      </svelte:fragment>
+
+      <svelte:fragment slot="right">
+        <StreamControl
+          id="clinic-history"
+          icon="uil uil-file-medical"
+          text="Ver historia clínica"
+          on:click={() => (isSidebarOpen = true)}
+        />
+      </svelte:fragment>
+    </StreamControls>
+
+    {#if isHost}
+      <Sidebar bind:isOpen={isSidebarOpen} />
+    {/if}
   </div>
 {/if}
