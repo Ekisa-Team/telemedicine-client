@@ -7,7 +7,7 @@
   class:open={isOpen}
 >
   <div class="relative w-full h-full ">
-    <div class="container pt-24">
+    <div class="container h-full pb-12 pt-28 md:pt-12">
       <slot />
     </div>
 
