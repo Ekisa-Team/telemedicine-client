@@ -1,5 +1,4 @@
 <script>
-  import {onMount} from 'svelte';
   import {TextUtils} from './../utils/text.utils.js';
 
   export let name = '';
@@ -7,14 +6,11 @@
   export let type = 'primary';
 
   let initials = '';
-
-  onMount(() => {
-    initials = TextUtils.normalize({text: name, letterCase: 'uppercase', separator: ' '})
-      .split(' ')
-      .map(t => t[0])
-      .slice(0, 2)
-      .join('');
-  });
+  $: initials = TextUtils.normalize({text: name, letterCase: 'uppercase', separator: ' '})
+    .split(' ')
+    .map(t => t[0])
+    .slice(0, 2)
+    .join('');
 </script>
 
 <div class="avatar {size} {type}">{initials}</div>
