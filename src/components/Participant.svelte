@@ -1,6 +1,6 @@
 <script>
   import {onMount} from 'svelte';
-  import {getParticipantName} from '../utils/room.utils';
+  import {RoomUtils} from './../utils/room.utils.js';
 
   export let participant;
   export let isLocal;
@@ -74,6 +74,6 @@
     class="absolute px-4 py-2 overflow-hidden font-semibold text-white bg-blue-600 rounded-full left-4 top-4 overflow-ellipsis whitespace-nowrap"
     style="max-width: 150px;"
   >
-    {getParticipantName(participant.identity)}
+    {RoomUtils.getParticipantName(participant.identity)}
   </span>
 </div>

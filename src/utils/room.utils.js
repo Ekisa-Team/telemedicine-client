@@ -3,4 +3,4 @@ const getParticipantName = identity => {
   return name;
 };
 
-export {getParticipantName};
+export const RoomUtils = {getParticipantName};

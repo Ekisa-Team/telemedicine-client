@@ -198,17 +198,25 @@
       </svelte:fragment>
 
       <svelte:fragment slot="right">
-        <StreamControl
-          id="clinic-history"
-          icon="uil uil-file-medical"
-          text="Ver historia clínica"
-          on:click={() => (isSidebarOpen = true)}
-        />
+        {#if isHost}
+          <StreamControl
+            id="clinic-history"
+            icon="uil uil-file-medical"
+            text="Ver historia clínica"
+            on:click={() => (isSidebarOpen = true)}
+          />
+        {/if}
       </svelte:fragment>
     </StreamControls>
 
     {#if isHost}
-      <Sidebar bind:isOpen={isSidebarOpen} />
+      <Sidebar bind:isOpen={isSidebarOpen}>
+        <iframe
+          src="https://ekisa.com.co/auth-app"
+          title="Ekisa web page"
+          class="w-full h-full rounded-2xl"
+        />
+      </Sidebar>
     {/if}
   </div>
 {/if}
