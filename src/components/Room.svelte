@@ -212,7 +212,7 @@
     {#if isHost}
       <Sidebar bind:isOpen={isSidebarOpen}>
         <iframe
-          src="https://ekisa.com.co/"
+          src="https://ekisa.com.co/auth-app"
           title="Ekisa web page"
           class="w-full h-full rounded-2xl"
         />
