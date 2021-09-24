@@ -7,6 +7,8 @@
   let queryParams;
   $: queryParams = queryString.parse(window.location.search);
 
+  let acceptsAgreement = false;
+
   const handleJoin = async ({detail}) => {
     const isHost = queryParams.isHost ? JSON.parse(queryParams.isHost.toLowerCase()) : false;
     const newIdentity = `${detail.identity}-${Math.random()}`;
@@ -24,7 +26,21 @@
     <h1 class="h4">Unirse a la Reunion</h1>
   </div>
 
-  <div class="flex items-end h-64 max-w-lg p-6 mx-auto shadow-2xl">
-    <JoinForm on:join={handleJoin} />
+  <div class="mt-20 mb-16">
+    <div class="flex items-center justify-center my-6 space-x-6">
+      <div class="form-check form-switch">
+        <label class="form-check-label" for="acceptsAgreement">
+          Acepto los términos y condiciones
+        </label>
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="acceptsAgreement"
+          bind:checked={acceptsAgreement}
+        />
+      </div>
+    </div>
   </div>
+
+  <JoinForm disabled={!acceptsAgreement} on:join={handleJoin} />
 </div>
