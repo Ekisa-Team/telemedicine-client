@@ -12,6 +12,7 @@
   let isHost = null;
   let enterWithVideo = false;
   let enterWithAudio = false;
+  let remoteUrl = '';
 
   onMount(async () => {
     const url = `https://telemedicine-twilio-server.herokuapp.com/api/token-service?identity=${queryParams.identity}`;
@@ -24,6 +25,7 @@
       isHost = queryParams.isHost && JSON.parse(queryParams.isHost);
       enterWithVideo = JSON.parse(queryParams.enterWithVideo);
       enterWithAudio = JSON.parse(queryParams.enterWithAudio);
+      remoteUrl = queryParams.remoteUrl;
     }, 1000);
   });
 
@@ -33,7 +35,7 @@
 </script>
 
 {#if token}
-  <Room {token} {roomName} {isHost} {enterWithVideo} {enterWithAudio} {destroyToken} />
+  <Room {token} {roomName} {isHost} {enterWithVideo} {enterWithAudio} {remoteUrl} {destroyToken} />
 {:else}
   <Loading text="Ingresando a la reunión..." />
 {/if}

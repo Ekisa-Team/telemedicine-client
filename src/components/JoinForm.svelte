@@ -2,11 +2,11 @@
   import {createEventDispatcher} from 'svelte';
   import {Button, Input} from 'sveltestrap';
 
+  export let identity = '';
   export let disabled;
 
   const dispatch = createEventDispatcher();
 
-  let identity = '';
   let enterWithVideo = true;
   let enterWithAudio = true;
 

@@ -5,7 +5,12 @@
   import JoinForm from '../components/JoinForm.svelte';
 
   let queryParams;
-  $: queryParams = queryString.parse(window.location.search);
+  let identity;
+
+  $: {
+    queryParams = queryString.parse(window.location.search);
+    identity = queryParams.identity || '';
+  }
 
   let acceptsAgreement = false;
 
@@ -13,10 +18,15 @@
     const isHost = queryParams.isHost ? JSON.parse(queryParams.isHost.toLowerCase()) : false;
     const newIdentity = `${detail.identity}-${Math.random()}`;
     const roomName = queryParams.roomName ? queryParams.roomName : v4();
+    const remoteUrl = queryParams.remoteUrl || '';
 
-    navigate(
-      `/room?roomName=${roomName}&isHost=${isHost}&identity=${newIdentity}&enterWithVideo=${detail.enterWithVideo}&enterWithAudio=${detail.enterWithAudio}`
-    );
+    let roomUrl = `/room?roomName=${roomName}&isHost=${isHost}&identity=${newIdentity}&enterWithVideo=${detail.enterWithVideo}&enterWithAudio=${detail.enterWithAudio}`;
+
+    if (isHost) {
+      roomUrl += `&remoteUrl=${remoteUrl}`;
+    }
+
+    navigate(roomUrl);
   };
 </script>
 
@@ -42,5 +52,5 @@
     </div>
   </div>
 
-  <JoinForm disabled={!acceptsAgreement} on:join={handleJoin} />
+  <JoinForm {identity} disabled={!acceptsAgreement} on:join={handleJoin} />
 </div>
