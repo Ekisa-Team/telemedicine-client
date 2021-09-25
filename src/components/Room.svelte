@@ -14,6 +14,7 @@
   export let isHost;
   export let enterWithVideo;
   export let enterWithAudio;
+  export let remoteUrl;
   export let destroyToken;
 
   let room = null;
@@ -209,13 +210,9 @@
       </svelte:fragment>
     </StreamControls>
 
-    {#if isHost}
+    {#if isHost && remoteUrl}
       <Sidebar bind:isOpen={isSidebarOpen}>
-        <iframe
-          src="https://ekisa.com.co/auth-app"
-          title="Ekisa web page"
-          class="w-full h-full rounded-2xl"
-        />
+        <iframe src={remoteUrl} title="Ekisa web page" class="w-full h-full rounded-2xl" />
       </Sidebar>
     {/if}
   </div>

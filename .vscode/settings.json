@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/7ec805ec-bbe7-4b92-9ce6-19742740f74f/resourceGroups/EKISA_APPS/providers/Microsoft.Web/sites/telemedicine-client",
+  "appService.deploySubpath": "public"
+}
